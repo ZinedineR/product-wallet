@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"boiler-plate-clean/internal/entity"
+	"product-wallet/internal/entity"
 )
 
 type ExampleSQLRepo struct {

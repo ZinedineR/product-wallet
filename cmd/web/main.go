@@ -1,31 +1,26 @@
 package main
 
 import (
-	"boiler-plate-clean/config"
-	"boiler-plate-clean/internal/delivery/http"
-	"boiler-plate-clean/internal/delivery/http/route"
-	"boiler-plate-clean/internal/gateway/messaging"
-	"boiler-plate-clean/internal/repository"
-	services "boiler-plate-clean/internal/services"
-	"boiler-plate-clean/migration"
-	kafkaserver "boiler-plate-clean/pkg/broker/kafkaservice"
-	"boiler-plate-clean/pkg/database"
-	"boiler-plate-clean/pkg/httpclient"
-	"boiler-plate-clean/pkg/logger"
-	"boiler-plate-clean/pkg/server"
-	"boiler-plate-clean/pkg/xvalidator"
 	"log/slog"
 	"os"
 	"os/signal"
+	"product-wallet/config"
+	"product-wallet/internal/delivery/http"
+	"product-wallet/internal/delivery/http/route"
+	"product-wallet/internal/repository"
+	services "product-wallet/internal/services"
+	"product-wallet/migration"
+	"product-wallet/pkg/database"
+	"product-wallet/pkg/logger"
+	"product-wallet/pkg/server"
+	"product-wallet/pkg/signature"
+	"product-wallet/pkg/xvalidator"
 	"strconv"
 	"syscall"
 )
 
 var (
-	httpClient      httpclient.Client
-	sqlClientRepo   *database.Database
-	kafkaDialer     *kafkaserver.KafkaService
-	exampleProducer messaging.ExampleProducer
+	sqlClient *database.Database
 )
 
 // @title           Pigeon
@@ -62,25 +57,28 @@ func main() {
 		AllowMethods: conf.AppEnvConfig.AllowMethods,
 		AllowHeaders: conf.AppEnvConfig.AllowHeaders,
 	})
+	//external
+	signaturer := signature.NewSignature(conf.AuthConfig.JwtSecretAccessToken, conf.AuthConfig.HMACSecretAccessToken)
 
 	// repository
-	exampleRepository := repository.NewExampleSQLRepository()
-
-	// external api
-	//gotifySvcExternalAPI := externalapi.NewExampleExternalImpl(conf, httpClient)
-
-	// producer
-
-	exampleProducer = messaging.NewExampleKafkaProducerImpl(kafkaDialer, conf.KafkaConfig.KafkaTopicEmail)
+	userRepository := repository.NewUserSQLRepository()
+	walletRepository := repository.NewWalletSQLRepository()
+	transactionRepository := repository.NewTransactionSQLRepository()
 
 	// service
-	exampleService := services.NewExampleService(sqlClientRepo.GetDB(), exampleRepository, validate)
+	userService := services.NewUserService(sqlClient.GetDB(), userRepository, signaturer, validate)
+	walletService := services.NewWalletService(sqlClient.GetDB(), walletRepository, userRepository, transactionRepository, validate)
+	transactionService := services.NewTransactionService(sqlClient.GetDB(), transactionRepository, walletRepository, validate)
 	// Handler
-	exampleHandler := http.NewExampleHTTPHandler(exampleService)
+	userHandler := http.NewUserHTTPHandler(userService)
+	walletHandler := http.NewWalletHTTPHandler(walletService)
+	transactionHandler := http.NewTransactionHTTPHandler(transactionService)
 
 	router := route.Router{
-		App:            ginServer.App,
-		ExampleHandler: exampleHandler,
+		App:                ginServer.App,
+		UserHandler:        userHandler,
+		WalletHandler:      walletHandler,
+		TransactionHandler: transactionHandler,
 	}
 	router.Setup()
 	router.SwaggerRouter()
@@ -102,12 +100,8 @@ func main() {
 
 func initInfrastructure(config *config.Config) {
 	//initPostgreSQL()
+	sqlClient = initSQL(config)
 
-	kafkaDialer = initKafka(config)
-
-	sqlClientRepo = initSQL(config)
-
-	httpClient = initHttpclient()
 }
 
 func initSQL(conf *config.Config) *database.Database {
@@ -119,33 +113,8 @@ func initSQL(conf *config.Config) *database.Database {
 		DbPort:   strconv.Itoa(conf.DatabaseConfig.Dbport),
 		DbPrefix: conf.DatabaseConfig.DbPrefix,
 	})
-	if conf.UseReplica() {
-		db.CqrsDB(conf.DatabaseConfig.Dbservice, &database.Config{
-			DbHost: conf.DatabaseReplicaConfig.Dbreplicahost,
-			DbUser: conf.DatabaseReplicaConfig.Dbreplicauser,
-			DbPass: conf.DatabaseReplicaConfig.Dbreplicapassword,
-			DbName: conf.DatabaseReplicaConfig.Dbreplicaname,
-			DbPort: strconv.Itoa(conf.DatabaseReplicaConfig.Dbreplicaport),
-		})
-	}
 	if conf.IsStaging() {
 		migration.AutoMigration(db)
 	}
 	return db
-}
-
-func initHttpclient() httpclient.Client {
-	httpClientFactory := httpclient.New()
-	httpClient := httpClientFactory.CreateClient()
-	return httpClient
-}
-
-func initKafka(config *config.Config) *kafkaserver.KafkaService {
-	kafkaDialer := kafkaserver.New(&kafkaserver.Config{
-		SecurityProtocol: config.KafkaConfig.KafkaSecurityProtocol,
-		Brokers:          config.KafkaConfig.KafkaBroker,
-		Username:         config.KafkaConfig.KafkaUsername,
-		Password:         config.KafkaConfig.KafkaPassword,
-	})
-	return kafkaDialer
 }

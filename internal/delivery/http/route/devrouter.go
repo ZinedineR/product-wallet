@@ -5,7 +5,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
-	//_ "boiler-plate-clean/statik"
+	//_ "product-wallet/statik"
 )
 
 func (h *Router) setupDevRouter() {

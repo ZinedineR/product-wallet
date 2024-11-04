@@ -1,9 +1,9 @@
 package pagination
 
 import (
-	"boiler-plate-clean/internal/model"
 	"fmt"
 	"gorm.io/gorm"
+	"product-wallet/internal/model"
 	"strings"
 )
 

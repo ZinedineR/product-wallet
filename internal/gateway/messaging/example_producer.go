@@ -1,8 +1,8 @@
 package messaging
 
 import (
-	"boiler-plate-clean/internal/model"
 	"context"
+	"product-wallet/internal/model"
 )
 
 type ExampleProducer interface {

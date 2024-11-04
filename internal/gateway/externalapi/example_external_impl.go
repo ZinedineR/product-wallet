@@ -1,9 +1,9 @@
 package externalapi
 
 import (
-	"boiler-plate-clean/config"
-	"boiler-plate-clean/pkg/httpclient"
 	"encoding/base64"
+	"product-wallet/config"
+	"product-wallet/pkg/httpclient"
 )
 
 type ExampleExternalImpl struct {

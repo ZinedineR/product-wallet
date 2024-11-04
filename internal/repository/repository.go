@@ -1,11 +1,11 @@
 package repository
 
 import (
-	"boiler-plate-clean/internal/model"
-	"boiler-plate-clean/pkg/pagination"
 	"context"
 	"errors"
 	"log/slog"
+	"product-wallet/internal/model"
+	"product-wallet/pkg/pagination"
 	"reflect"
 	"strings"
 
@@ -27,7 +27,7 @@ type CommonQuery[T any] interface {
 		filter model.FilterParams,
 	) (*model.PaginationData[T], error)
 	FindByID(ctx context.Context, tx *gorm.DB, id string) (*T, error)
-	FindByColumn(
+	FindByFilter(
 		ctx context.Context, tx *gorm.DB, filter model.FilterParams, order model.OrderParam,
 	) (*T, error)
 }
@@ -139,7 +139,7 @@ func (r *Repository[T]) FindByID(ctx context.Context, tx *gorm.DB, id string) (*
 	return &data, nil
 }
 
-func (r *Repository[T]) FindByColumn(
+func (r *Repository[T]) FindByFilter(
 	ctx context.Context, tx *gorm.DB, filter model.FilterParams, order model.OrderParam,
 ) (*T, error) {
 	var data T

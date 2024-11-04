@@ -1,7 +1,6 @@
 package signature
 
 import (
-	"boiler-plate-clean/pkg/exception"
 	"bytes"
 	"crypto"
 	"crypto/hmac"
@@ -12,6 +11,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"product-wallet/pkg/exception"
 	"time"
 )
 
@@ -66,7 +66,7 @@ type JwtAuthenticationRes struct {
 func (s *Signature) GenerateJWT(username string) (string, error) {
 	claims := JWTClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer:    "boiler-plate-clean",
+			Issuer:    "product-wallet",
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
 		},
 		Username: username,

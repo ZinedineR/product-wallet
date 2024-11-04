@@ -1,10 +1,10 @@
 package http
 
 import (
-	_ "boiler-plate-clean/internal/delivery/http/response"
-	"boiler-plate-clean/internal/entity"
-	service "boiler-plate-clean/internal/services"
 	"github.com/gin-gonic/gin"
+	_ "product-wallet/internal/delivery/http/response"
+	"product-wallet/internal/entity"
+	service "product-wallet/internal/services"
 )
 
 type ExampleHTTPHandler struct {

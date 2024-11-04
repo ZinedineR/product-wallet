@@ -1,10 +1,10 @@
 package service
 
 import (
-	"boiler-plate-clean/internal/entity"
-	"boiler-plate-clean/internal/model"
-	"boiler-plate-clean/pkg/exception"
 	"context"
+	"product-wallet/internal/entity"
+	"product-wallet/internal/model"
+	"product-wallet/pkg/exception"
 )
 
 type ExampleService interface {

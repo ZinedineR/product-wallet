@@ -1,10 +1,10 @@
 package messaging
 
 import (
-	kafkaserver "boiler-plate-clean/pkg/broker/kafkaservice"
 	"context"
 	"github.com/segmentio/kafka-go"
 	"log/slog"
+	kafkaserver "product-wallet/pkg/broker/kafkaservice"
 )
 
 type ConsumerKafkaHandler func(ctx context.Context, message *kafka.Message) error

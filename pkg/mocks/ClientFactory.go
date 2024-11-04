@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	httpclient "boiler-plate-clean/pkg/httpclient"
+	httpclient "product-wallet/pkg/httpclient"
 
 	mock "github.com/stretchr/testify/mock"
 )

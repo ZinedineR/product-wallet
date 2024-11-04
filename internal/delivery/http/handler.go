@@ -1,12 +1,12 @@
 package http
 
 import (
-	"boiler-plate-clean/internal/delivery/http/response"
-	"boiler-plate-clean/internal/model"
-	"boiler-plate-clean/pkg/exception"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"product-wallet/internal/delivery/http/response"
+	"product-wallet/internal/model"
+	"product-wallet/pkg/exception"
 	"regexp"
 	"strconv"
 	"strings"
@@ -126,7 +126,9 @@ func (h *Handler) BadRequestJSON(e *gin.Context, msg any, err ...any) {
 func (h *Handler) UnauthorizedJSON(e *gin.Context, msg any, err ...any) {
 	h.ErrorJSON(e, 401, msg, err)
 }
-
+func (h *Handler) InternalErrorJSON(e *gin.Context, msg any, err ...any) {
+	h.ErrorJSON(e, 500, msg, err)
+}
 func (h *Handler) ParamInt(e *gin.Context, key string) (int, error) {
 	return strconv.Atoi(e.Param(key))
 }

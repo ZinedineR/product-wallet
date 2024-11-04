@@ -1,12 +1,12 @@
 package service
 
 import (
-	"boiler-plate-clean/internal/entity"
-	"boiler-plate-clean/internal/repository"
-	"boiler-plate-clean/pkg/exception"
-	"boiler-plate-clean/pkg/xvalidator"
 	"context"
 	"gorm.io/gorm"
+	"product-wallet/internal/entity"
+	"product-wallet/internal/repository"
+	"product-wallet/pkg/exception"
+	"product-wallet/pkg/xvalidator"
 )
 
 type ExampleServiceImpl struct {
