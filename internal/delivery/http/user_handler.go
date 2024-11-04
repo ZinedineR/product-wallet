@@ -24,8 +24,8 @@ func NewUserHTTPHandler(user service.UserService) *UserHTTPHandler {
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Param register body entity.UserLogin true "Registration Request"
-// @Success 200 {object} response.DataResponse{data=entity.UserLogin} "success"
+// @Param register body model.CreateUserReq true "Registration Request"
+// @Success 200 {object} response.DataResponse{data=model.CreateUserRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
 // @Router /auth/register [post]
 func (h UserHTTPHandler) Register(ctx *gin.Context) {
@@ -49,8 +49,8 @@ func (h UserHTTPHandler) Register(ctx *gin.Context) {
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Param login body entity.UserLogin true "Login Request"
-// @Success 200 {object} response.DataResponse{data=service.UserLoginResponse} "success"
+// @Param login body model.CreateUserReq true "Login Request"
+// @Success 200 {object} response.DataResponse{data=model.LoginUserRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
 // @Router /auth/login [post]
 func (h UserHTTPHandler) Login(ctx *gin.Context) {

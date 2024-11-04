@@ -98,7 +98,7 @@ func (s *UserServiceImpl) Login(ctx context.Context, req *model.CreateUserReq) (
 	if ok := s.signaturer.CheckBscryptPasswordHash(req.Password, result.Password); !ok {
 		return nil, exception.PermissionDenied("username/password unmatched")
 	}
-	jwtToken, err := s.signaturer.GenerateJWT(result.Username)
+	jwtToken, err := s.signaturer.GenerateJWT(result.Id, result.Username)
 	if err != nil {
 		return nil, exception.Internal("err", err)
 	}

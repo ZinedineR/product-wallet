@@ -14,8 +14,10 @@ type Transaction struct {
 	Type            string     `json:"type" validate:"eq=income|eq=expense|eq=transfer"`
 	Amount          float64    `json:"amount"`
 	Description     string     `json:"description"`
-	WalletId        string     `json:"wallet_id"`
+	WalletId        string     `gorm:"type:uuid" json:"wallet_id"`
 	Wallet          *Wallet    `gorm:"foreignKey:WalletId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"wallet,omitempty"`
+	ProductId       *string    `gorm:"type:uuid" json:"product_id,omitempty"`
+	Product         *Product   `gorm:"foreignKey:ProductId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;default:null" json:"product,omitempty"`
 	TransactionTime *time.Time `gorm:"autoCreateTime" json:"transaction_time"`
 }
 

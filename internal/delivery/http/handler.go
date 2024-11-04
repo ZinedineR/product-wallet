@@ -7,6 +7,7 @@ import (
 	"product-wallet/internal/delivery/http/response"
 	"product-wallet/internal/model"
 	"product-wallet/pkg/exception"
+	"product-wallet/pkg/utils/converter"
 	"regexp"
 	"strconv"
 	"strings"
@@ -129,12 +130,21 @@ func (h *Handler) UnauthorizedJSON(e *gin.Context, msg any, err ...any) {
 func (h *Handler) InternalErrorJSON(e *gin.Context, msg any, err ...any) {
 	h.ErrorJSON(e, 500, msg, err)
 }
+
 func (h *Handler) ParamInt(e *gin.Context, key string) (int, error) {
 	return strconv.Atoi(e.Param(key))
 }
 
 func (h *Handler) ParamInt64(e *gin.Context, key string) (int64, error) {
 	return strconv.ParseInt(e.Param(key), 10, 64)
+}
+
+func (h *Handler) ParseGetKey(e *gin.Context, key string) string {
+	result, ok := e.Get(key)
+	if !ok {
+		return ""
+	}
+	return converter.ToString(result)
 }
 
 func (h *Handler) ParseNameParam(c *gin.Context) (string, string) {

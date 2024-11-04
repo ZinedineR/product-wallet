@@ -9,6 +9,7 @@ import (
 type Router struct {
 	App                *gin.Engine
 	UserHandler        *http.UserHTTPHandler
+	ProductHandler     *http.ProductHTTPHandler
 	WalletHandler      *http.WalletHTTPHandler
 	TransactionHandler *http.TransactionHTTPHandler
 	AuthMiddleware     *api.AuthMiddleware
@@ -28,6 +29,16 @@ func (h *Router) Setup() {
 	privateApi := h.App.Group("")
 	privateApi.Use(h.AuthMiddleware.JWTAuthentication)
 	{
+		// Product Routes
+		productApi := privateApi.Group("/products")
+		{
+			productApi.POST("", h.ProductHandler.Create)
+			productApi.PUT("/:id", h.ProductHandler.Update)
+			productApi.GET("", h.ProductHandler.Find)
+			productApi.GET("/:id", h.ProductHandler.Detail)
+			productApi.DELETE("/:id", h.ProductHandler.Delete)
+		}
+
 		// Wallet Routes
 		walletApi := privateApi.Group("/wallets")
 		{

@@ -8,74 +8,48 @@ This is golang clean architecture template.
 
 ![Clean Architecture](architecture.png)
 
-1. External system perform request (HTTP, gRPC, Messaging, etc)
-2. The Delivery creates various Model from request data
-3. The Delivery calls Use Case, and execute it using Model data
-4. The Use Case create Entity data for the business logic
-5. The Use Case calls Repository, and execute it using Entity data
-6. The Repository use Entity data to perform database operation
-7. The Repository perform database operation to the database
-8. The Use Case create various Model for Gateway or from Entity data
-9. The Use Case calls Gateway, and execute it using Model data
-10. The Gateway using Model data to construct request to external system 
-11. The Gateway perform request to external system (HTTP, gRPC, Messaging, etc)
+1. Delivery receives an HTTP request from an external system.
+2. Delivery parses request data and constructs the necessary data model.
+3. Delivery calls Service, passing along the constructed model data.
+4. Service applies business logic, potentially creating or modifying entity data.
+5. Service interacts with Repository to perform database operations, using the processed entity data.
+6. Repository accesses the database and executes the necessary operations based on entity data.
+7. Service formats the response model and sends it back to Delivery.
+8. Delivery sends the HTTP response back to the external system.
 
 ## Tech Stack
 
 - Golang : https://github.com/golang/go
-- MySQL (Database) : https://github.com/mysql/mysql-server
+- Postgres (Database) : https://github.com/go-gorm/postgres
 - Apache Kafka : https://github.com/apache/kafka
 
 ## Framework & Library
 
-- GoFiber (HTTP Framework) : https://github.com/gofiber/fiber
+- Gin (HTTP Framework) : https://github.com/gin-gonic/gin
 - GORM (ORM) : https://github.com/go-gorm/gorm
 - Viper (Configuration) : https://github.com/spf13/viper
-- Golang Migrate (Database Migration) : https://github.com/golang-migrate/migrate
 - Go Playground Validator (Validation) : https://github.com/go-playground/validator
-- Logrus (Logger) : https://github.com/sirupsen/logrus
-- Confluent Kafka Golang : https://github.com/confluentinc/confluent-kafka-go
 
-## Configuration
-
-All configuration is in `config.json` file.
 
 ## API Spec
 
-All API Spec is in `api` folder.
+All API Spec is in [swagger documentation](./docs/swagger.yaml)
 
-## Database Migration
-
-All database migration is in `db/migrations` folder.
-
-### Create Migration
-
-```shell
-migrate create -ext sql -dir db/migrations create_table_xxx
-```
-
-### Run Migration
-
-```shell
-migrate -database "mysql://root:@tcp(localhost:3306)/golang_clean_architecture?charset=utf8mb4&parseTime=True&loc=Local" -path db/migrations up
-```
 
 ## Run Application
-
-### Run unit test
-
-```bash
-go test -v ./test/
-```
 
 ### Run web server
 
 ```bash
 go run cmd/web/main.go
 ```
-
-### Run worker
+### Docker compose
 
 ```bash
-go run cmd/worker/main.go
+docker compose up -d
 ```
+
+### Access Docs
+
+after running:
+- http://localhost:9004/swagger/index.html

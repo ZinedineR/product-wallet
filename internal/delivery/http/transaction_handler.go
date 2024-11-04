@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "product-wallet/internal/delivery/http/response"
 	"product-wallet/internal/model"
 	service "product-wallet/internal/services"
 )
@@ -23,6 +24,7 @@ func NewTransactionHTTPHandler(transactionService service.TransactionService) *T
 // @Tags Transactions
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param transaction body model.CreateTransactionReq true "Create Transaction Request"
 // @Success 200 {object} response.DataResponse{data=model.CreateTransactionRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
@@ -47,6 +49,7 @@ func (h *TransactionHTTPHandler) Create(ctx *gin.Context) {
 // @Tags Transactions
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param id path string true "Transaction ID"
 // @Success 200 {object} response.DataResponse{data=model.GetTransactionByIDRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
@@ -70,11 +73,11 @@ func (h *TransactionHTTPHandler) Detail(ctx *gin.Context) {
 // @Tags Transactions
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param pageSize query string false "Number of items per page"
 // @Param page query string false "Page number"
 // @Param filter query string false "Filter rules<br><br>### Rules Filter<br>rule:<br>  * {Name of Field}:{value}:{Symbol}<br><br>Symbols:<br>  * eq (=)<br>  * lt (<)<br>  * gt (>)<br>  * lte (<=)<br>  * gte (>=)<br>  * in (in)<br>  * like (like)"
 // @Param sort query string false "Sort rules:<br><br>### Rules Sort<br>rule:<br>  * {Name of Field}:{Symbol}<br><br>Symbols:<br>  * asc<br>  * desc<br><br>"
-// @Param filter body model.GetAllTransactionReq true "Get All Transactions Request"
 // @Success 200 {object} response.DataResponse{data=model.GetAllTransactionRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
 // @Router /transactions [get]
@@ -110,6 +113,7 @@ func (h *TransactionHTTPHandler) Find(ctx *gin.Context) {
 // @Tags Transactions
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param credit body model.CreditTransactionReq true "Credit Transaction Request"
 // @Success 200 {object} response.DataResponse{data=model.CreditTransactionRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
@@ -134,6 +138,7 @@ func (h *TransactionHTTPHandler) Credit(ctx *gin.Context) {
 // @Tags Transactions
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param transfer body model.TransferTransactionReq true "Transfer Transaction Request"
 // @Success 200 {object} response.DataResponse{data=model.TransferTransactionRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
@@ -158,6 +163,7 @@ func (h *TransactionHTTPHandler) Transfer(ctx *gin.Context) {
 // @Tags Transactions
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param id path string true "Transaction ID"
 // @Success 200 {object} response.DataResponse{data=model.DeleteTransactionRes} "success"
 // @Failure 400 {object} response.DataResponse "error"

@@ -8,7 +8,7 @@ import (
 
 type BaseWalletReq struct {
 	Name   string `json:"name" example:"personal"`
-	UserId string `json:"user_id" validate:"required,uuid" example:"123e4567-e89b-12d3-a456-426614174000"`
+	UserId string `json:"-" validate:"required,uuid" swaggerignore:"true"`
 }
 
 type CreateWalletReq struct {
@@ -29,17 +29,17 @@ type CreateWalletRes struct {
 
 type UpdateWalletReq struct {
 	BaseWalletReq
-	ID string `json:"id" name:"id"`
+	ID string `swaggerignore:"true"`
 }
 type UpdateWalletRes struct {
 	entity.Wallet
 }
 
 type DeleteWalletReq struct {
-	ID string `json:"id" name:"id"`
+	ID string `swaggerignore:"true"`
 }
 type DeleteWalletRes struct {
-	ID string `json:"id" name:"id"`
+	ID string `swaggerignore:"true"`
 }
 
 type GetAllWalletReq struct {
@@ -52,7 +52,7 @@ type GetAllWalletRes struct {
 }
 
 type GetWalletByIDReq struct {
-	ID string `json:"id" name:"id"`
+	ID string `swaggerignore:"true"`
 }
 
 type GetWalletByIDRes struct {
@@ -60,9 +60,9 @@ type GetWalletByIDRes struct {
 }
 
 type GetWalletByTransactionReq struct {
-	ID   string `json:"id" name:"id"`
-	From time.Time
-	To   time.Time
+	ID   string    `swaggerignore:"true"`
+	From time.Time `swaggerignore:"true"`
+	To   time.Time `swaggerignore:"true"`
 }
 
 type GetWalletByTransactionRes struct {

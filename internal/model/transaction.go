@@ -7,9 +7,9 @@ import (
 )
 
 type BaseTransactionReq struct {
-	WalletId string  `json:"wallet_id"`
-	Type     string  `json:"type" validate:"eq=income|eq=expense|eq=transfer"`
-	Amount   float64 `json:"amount"`
+	WalletId        string  `json:"wallet_id" validate:"required,uuid"`
+	ProductId       *string `json:"product_id,omitempty" validate:"required,uuid"`
+	ProductQuantity *uint   `json:"product_quantity,omitempty" validate:"required,number"`
 }
 
 type CreateTransactionReq struct {
@@ -18,10 +18,45 @@ type CreateTransactionReq struct {
 
 func (req BaseTransactionReq) ToEntity() *entity.Transaction {
 	return &entity.Transaction{
-		Id:       uuid.NewString(),
-		WalletId: req.WalletId,
-		Type:     req.Type,
-		Amount:   req.Amount,
+		Id:        uuid.NewString(),
+		ProductId: req.ProductId,
+		WalletId:  req.WalletId,
+		Type:      "expense",
+	}
+}
+
+//func (req BaseTransactionReq) ToEntity(productname string, totalprice float64) *entity.Transaction {
+//	if req.ProductQuantity == nil {
+//		var one uint = 1
+//		req.ProductQuantity = &one
+//	}
+//	return &entity.Transaction{
+//		Id:          uuid.NewString(),
+//		ProductId:   req.ProductId,
+//		WalletId:    req.WalletId,
+//		Type:        "expense",
+//		Description: "Buying " + productname + ", quantity: " + converter.ToString(*req.ProductQuantity) + " for " + converter.ToString(totalprice),
+//		Amount:      totalprice,
+//	}
+//}
+
+func (req BaseTransactionReq) ToProductEntity(product *entity.Product) *entity.Product {
+	var (
+		quantity uint
+	)
+	quantity = product.Quantity - *req.ProductQuantity
+	if quantity == 0 {
+		product.Available = false
+	} else {
+		product.Available = true
+	}
+	return &entity.Product{
+		Id:          product.Id,
+		Name:        product.Name,
+		Price:       product.Price,
+		Description: product.Description,
+		Quantity:    product.Quantity - *req.ProductQuantity,
+		Available:   product.Available,
 	}
 }
 
@@ -31,17 +66,17 @@ type CreateTransactionRes struct {
 
 type UpdateTransactionReq struct {
 	BaseTransactionReq
-	ID string `json:"id" name:"id"`
+	ID string
 }
 type UpdateTransactionRes struct {
 	entity.Transaction
 }
 
 type DeleteTransactionReq struct {
-	ID string `json:"id" name:"id"`
+	ID string `swaggerignore:"true"`
 }
 type DeleteTransactionRes struct {
-	ID string `json:"id" name:"id"`
+	ID string `swaggerignore:"true"`
 }
 
 type GetAllTransactionReq struct {
@@ -54,7 +89,7 @@ type GetAllTransactionRes struct {
 }
 
 type GetTransactionByIDReq struct {
-	ID string `json:"id" name:"id"`
+	ID string `swaggerignore:"true"`
 }
 
 type GetTransactionByIDRes struct {
@@ -62,8 +97,8 @@ type GetTransactionByIDRes struct {
 }
 
 type CreditTransactionReq struct {
-	WalletId string  `json:"wallet_id"`
-	Amount   float64 `json:"amount"`
+	WalletId string  `json:"wallet_id" validate:"required"`
+	Amount   float64 `json:"amount" validate:"required"`
 }
 type CreditTransactionRes struct {
 	entity.Transaction
@@ -80,9 +115,9 @@ func (req CreditTransactionReq) ToEntity() *entity.Transaction {
 }
 
 type TransferTransactionReq struct {
-	SenderId   string  `json:"wallet_id"`
-	ReceiverId string  `json:"receiver_id"`
-	Amount     float64 `json:"amount"`
+	SenderId   string  `json:"wallet_id" validate:"required"`
+	ReceiverId string  `json:"receiver_id" validate:"required"`
+	Amount     float64 `json:"amount" validate:"required"`
 }
 type TransferTransactionRes struct {
 	SenderTransaction   entity.Transaction `json:"sender_transaction"`

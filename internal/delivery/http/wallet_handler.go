@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "product-wallet/internal/delivery/http/response"
 	"product-wallet/internal/model"
 	service "product-wallet/internal/services"
 )
@@ -24,7 +25,9 @@ func NewWalletHTTPHandler(walletService service.WalletService) *WalletHTTPHandle
 // @Tags Wallets
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param wallet body model.CreateWalletReq true "Create Wallet Request"
+// @Param wallet body model.CreateWalletReq true "Update Wallet Request"
 // @Success 200 {object} response.DataResponse{data=model.CreateWalletRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
 // @Router /wallets [post]
@@ -34,6 +37,7 @@ func (h WalletHTTPHandler) Create(ctx *gin.Context) {
 		h.BadRequestJSON(ctx, err.Error())
 		return
 	}
+	request.UserId = h.ParseGetKey(ctx, "user_id")
 	response, errException := h.WalletService.Create(ctx, &request)
 	if errException != nil {
 		h.ExceptionJSON(ctx, errException)
@@ -48,6 +52,7 @@ func (h WalletHTTPHandler) Create(ctx *gin.Context) {
 // @Tags Wallets
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param id path string true "Wallet ID"
 // @Param wallet body model.UpdateWalletReq true "Update Wallet Request"
 // @Success 200 {object} response.DataResponse{data=model.UpdateWalletRes} "success"
@@ -61,6 +66,7 @@ func (h WalletHTTPHandler) Update(ctx *gin.Context) {
 		return
 	}
 	request.ID = id
+	request.UserId = h.ParseGetKey(ctx, "user_id")
 	response, errException := h.WalletService.Update(ctx, &request)
 	if errException != nil {
 		h.ExceptionJSON(ctx, errException)
@@ -75,11 +81,11 @@ func (h WalletHTTPHandler) Update(ctx *gin.Context) {
 // @Tags Wallets
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param pageSize query string false "Number of items per page"
 // @Param page query string false "Page number"
 // @Param filter query string false "Filter rules<br><br>### Rules Filter<br>rule:<br>  * {Name of Field}:{value}:{Symbol}<br><br>Symbols:<br>  * eq (=)<br>  * lt (<)<br>  * gt (>)<br>  * lte (<=)<br>  * gte (>=)<br>  * in (in)<br>  * like (like)"
 // @Param sort query string false "Sort rules:<br><br>### Rules Sort<br>rule:<br>  * {Name of Field}:{Symbol}<br><br>Symbols:<br>  * asc<br>  * desc<br><br>"
-// @Param filter body model.GetAllWalletReq true "Get All Wallets Request"
 // @Success 200 {object} response.DataResponse{data=model.GetAllWalletRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
 // @Router /wallets [get]
@@ -108,6 +114,7 @@ func (h WalletHTTPHandler) Find(ctx *gin.Context) {
 // @Tags Wallets
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param id path string true "Wallet ID"
 // @Success 200 {object} response.DataResponse{data=model.GetWalletByIDRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
@@ -131,13 +138,14 @@ func (h WalletHTTPHandler) Detail(ctx *gin.Context) {
 // @Tags Wallets
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param id path string true "Wallet ID"
 // @Param from query string false "Start date for transactions in YYYY-MM-DD format"
 // @Param to query string false "End date for transactions in YYYY-MM-DD format"
 // @Success 200 {object} response.DataResponse{data=model.GetWalletByTransactionRes} "success"
 // @Failure 400 {object} response.DataResponse "error"
-// @Router /transaction/{id} [get]
-func (h *WalletHTTPHandler) DetailWalletTransaction(ctx *gin.Context) {
+// @Router /wallets/transaction/{id} [get]
+func (h WalletHTTPHandler) DetailWalletTransaction(ctx *gin.Context) {
 	// Extract wallet ID from the path
 	id := ctx.Param("id")
 
@@ -172,6 +180,7 @@ func (h *WalletHTTPHandler) DetailWalletTransaction(ctx *gin.Context) {
 // @Tags Wallets
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Authorization JWT input: Bearer <Token>"
 // @Param id path string true "Wallet ID"
 // @Success 200 {object} response.DataResponse{data=model.DeleteWalletRes} "success"
 // @Failure 400 {object} response.DataResponse "error"

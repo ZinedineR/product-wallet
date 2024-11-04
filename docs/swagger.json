@@ -1,0 +1,1907 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server celler server.",
+        "title": "Pigeon",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:9004",
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Authenticates the user and returns an access token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User login",
+                "parameters": [
+                    {
+                        "description": "Login Request",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.LoginUserRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "Registers a new user with the provided username and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Register a new user",
+                "parameters": [
+                    {
+                        "description": "Registration Request",
+                        "name": "register",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.CreateUserRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "description": "Retrieves a list of all products with optional filters, pagination, and sorting",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get all products",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Number of items per page",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter rules",
+                        "name": "filter",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort rules",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.GetAllProductRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new product in the catalog",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Create a new product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Product Request",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateProductReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.CreateProductRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "description": "Retrieves the details of a specific product by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get product details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "uuid format",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.GetProductByIDRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates product details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Update an existing product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "uuid format",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Product Request",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateProductReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.UpdateProductRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a product by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Delete a product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "uuid format",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.DeleteProductRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions": {
+            "get": {
+                "description": "Retrieves all transactions with optional filters, pagination, and sorting",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Get all transactions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Number of items per page",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter rules\u003cbr\u003e\u003cbr\u003e### Rules Filter\u003cbr\u003erule:\u003cbr\u003e  * {Name of Field}:{value}:{Symbol}\u003cbr\u003e\u003cbr\u003eSymbols:\u003cbr\u003e  * eq (=)\u003cbr\u003e  * lt (\u003c)\u003cbr\u003e  * gt (\u003e)\u003cbr\u003e  * lte (\u003c=)\u003cbr\u003e  * gte (\u003e=)\u003cbr\u003e  * in (in)\u003cbr\u003e  * like (like)",
+                        "name": "filter",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort rules:\u003cbr\u003e\u003cbr\u003e### Rules Sort\u003cbr\u003erule:\u003cbr\u003e  * {Name of Field}:{Symbol}\u003cbr\u003e\u003cbr\u003eSymbols:\u003cbr\u003e  * asc\u003cbr\u003e  * desc\u003cbr\u003e\u003cbr\u003e",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.GetAllTransactionRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new transaction record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Create a new transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Transaction Request",
+                        "name": "transaction",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateTransactionReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.CreateTransactionRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/credit": {
+            "post": {
+                "description": "Credits a specific wallet with an amount",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Credit transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Credit Transaction Request",
+                        "name": "credit",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreditTransactionReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.CreditTransactionRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/transfer": {
+            "post": {
+                "description": "Transfers an amount from one wallet to another",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Transfer transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Transfer Transaction Request",
+                        "name": "transfer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.TransferTransactionReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.TransferTransactionRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/{id}": {
+            "get": {
+                "description": "Retrieves details of a specific transaction by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Get transaction details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Transaction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.GetTransactionByIDRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a transaction by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Delete a transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Transaction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.DeleteTransactionRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallets": {
+            "get": {
+                "description": "Retrieves all wallets for the user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wallets"
+                ],
+                "summary": "Get all wallets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Number of items per page",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter rules\u003cbr\u003e\u003cbr\u003e### Rules Filter\u003cbr\u003erule:\u003cbr\u003e  * {Name of Field}:{value}:{Symbol}\u003cbr\u003e\u003cbr\u003eSymbols:\u003cbr\u003e  * eq (=)\u003cbr\u003e  * lt (\u003c)\u003cbr\u003e  * gt (\u003e)\u003cbr\u003e  * lte (\u003c=)\u003cbr\u003e  * gte (\u003e=)\u003cbr\u003e  * in (in)\u003cbr\u003e  * like (like)",
+                        "name": "filter",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort rules:\u003cbr\u003e\u003cbr\u003e### Rules Sort\u003cbr\u003erule:\u003cbr\u003e  * {Name of Field}:{Symbol}\u003cbr\u003e\u003cbr\u003eSymbols:\u003cbr\u003e  * asc\u003cbr\u003e  * desc\u003cbr\u003e\u003cbr\u003e",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.GetAllWalletRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new wallet for the user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wallets"
+                ],
+                "summary": "Create a new wallet",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Wallet Request",
+                        "name": "wallet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateWalletReq"
+                        }
+                    },
+                    {
+                        "description": "Update Wallet Request",
+                        "name": "wallet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateWalletReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.CreateWalletRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallets/transaction/{id}": {
+            "get": {
+                "description": "Retrieves details of a specific wallet, including transactions within a date range",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wallets"
+                ],
+                "summary": "Get wallet transaction details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Wallet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start date for transactions in YYYY-MM-DD format",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date for transactions in YYYY-MM-DD format",
+                        "name": "to",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.GetWalletByTransactionRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallets/{id}": {
+            "get": {
+                "description": "Retrieves details of a specific wallet by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wallets"
+                ],
+                "summary": "Get wallet details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Wallet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.GetWalletByIDRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates wallet information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wallets"
+                ],
+                "summary": "Update an existing wallet",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Wallet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Wallet Request",
+                        "name": "wallet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateWalletReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.UpdateWalletRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a wallet by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wallets"
+                ],
+                "summary": "Delete a wallet",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization JWT input: Bearer \u003cToken\u003e",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Wallet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.DataResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.DeleteWalletRes"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entity.Product": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Transaction": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "product": {
+                    "$ref": "#/definitions/entity.Product"
+                },
+                "product_id": {
+                    "type": "string"
+                },
+                "transaction_time": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "wallet": {
+                    "$ref": "#/definitions/entity.Wallet"
+                },
+                "wallet_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "password": {
+                    "description": "Example of bcrypt-hashed password",
+                    "type": "string",
+                    "example": "$2a$12$eixZaYVK1fsbw1ZfbX3OXe.PZyWJQ0Zf10hErsTQ6FVRHiA2vwLHu"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "john_doe"
+                }
+            }
+        },
+        "entity.Wallet": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "last_transaction": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "personal"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+            }
+        },
+        "model.CreateProductReq": {
+            "type": "object",
+            "required": [
+                "name",
+                "price",
+                "quantity"
+            ],
+            "properties": {
+                "available": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.CreateProductRes": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateTransactionReq": {
+            "type": "object",
+            "required": [
+                "product_id",
+                "product_quantity",
+                "wallet_id"
+            ],
+            "properties": {
+                "product_id": {
+                    "type": "string"
+                },
+                "product_quantity": {
+                    "type": "integer"
+                },
+                "wallet_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateTransactionRes": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "product": {
+                    "$ref": "#/definitions/entity.Product"
+                },
+                "product_id": {
+                    "type": "string"
+                },
+                "transaction_time": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "wallet": {
+                    "$ref": "#/definitions/entity.Wallet"
+                },
+                "wallet_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateUserReq": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "SecurePass123!"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "john_doe"
+                }
+            }
+        },
+        "model.CreateUserRes": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "password": {
+                    "description": "Example of bcrypt-hashed password",
+                    "type": "string",
+                    "example": "$2a$12$eixZaYVK1fsbw1ZfbX3OXe.PZyWJQ0Zf10hErsTQ6FVRHiA2vwLHu"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "john_doe"
+                }
+            }
+        },
+        "model.CreateWalletReq": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "personal"
+                }
+            }
+        },
+        "model.CreateWalletRes": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "last_transaction": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "personal"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+            }
+        },
+        "model.CreditTransactionReq": {
+            "type": "object",
+            "required": [
+                "amount",
+                "wallet_id"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "wallet_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreditTransactionRes": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "product": {
+                    "$ref": "#/definitions/entity.Product"
+                },
+                "product_id": {
+                    "type": "string"
+                },
+                "transaction_time": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "wallet": {
+                    "$ref": "#/definitions/entity.Wallet"
+                },
+                "wallet_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.DeleteProductRes": {
+            "type": "object"
+        },
+        "model.DeleteTransactionRes": {
+            "type": "object"
+        },
+        "model.DeleteWalletRes": {
+            "type": "object"
+        },
+        "model.GetAllProductRes": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "The actual data",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Product"
+                    }
+                },
+                "limit": {
+                    "description": "The size of the page",
+                    "type": "integer"
+                },
+                "page": {
+                    "description": "The current page",
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "description": "The total number of pages",
+                    "type": "integer"
+                },
+                "total_row_per_page": {
+                    "description": "The total number of data per page",
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "description": "The total number of data",
+                    "type": "integer"
+                }
+            }
+        },
+        "model.GetAllTransactionRes": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "The actual data",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Transaction"
+                    }
+                },
+                "limit": {
+                    "description": "The size of the page",
+                    "type": "integer"
+                },
+                "page": {
+                    "description": "The current page",
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "description": "The total number of pages",
+                    "type": "integer"
+                },
+                "total_row_per_page": {
+                    "description": "The total number of data per page",
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "description": "The total number of data",
+                    "type": "integer"
+                }
+            }
+        },
+        "model.GetAllWalletRes": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "The actual data",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Wallet"
+                    }
+                },
+                "limit": {
+                    "description": "The size of the page",
+                    "type": "integer"
+                },
+                "page": {
+                    "description": "The current page",
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "description": "The total number of pages",
+                    "type": "integer"
+                },
+                "total_row_per_page": {
+                    "description": "The total number of data per page",
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "description": "The total number of data",
+                    "type": "integer"
+                }
+            }
+        },
+        "model.GetProductByIDRes": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.GetTransactionByIDRes": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "product": {
+                    "$ref": "#/definitions/entity.Product"
+                },
+                "product_id": {
+                    "type": "string"
+                },
+                "transaction_time": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "wallet": {
+                    "$ref": "#/definitions/entity.Wallet"
+                },
+                "wallet_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.GetWalletByIDRes": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "last_transaction": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "personal"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+            }
+        },
+        "model.GetWalletByTransactionRes": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "last_transaction": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "personal"
+                },
+                "transaction": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Transaction"
+                    }
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+            }
+        },
+        "model.LoginUserRes": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "description": "JWT token example",
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "john_doe"
+                }
+            }
+        },
+        "model.TransferTransactionReq": {
+            "type": "object",
+            "required": [
+                "amount",
+                "receiver_id",
+                "wallet_id"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "receiver_id": {
+                    "type": "string"
+                },
+                "wallet_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.TransferTransactionRes": {
+            "type": "object",
+            "properties": {
+                "receiver_transaction": {
+                    "$ref": "#/definitions/entity.Transaction"
+                },
+                "sender_transaction": {
+                    "$ref": "#/definitions/entity.Transaction"
+                }
+            }
+        },
+        "model.UpdateProductReq": {
+            "type": "object",
+            "required": [
+                "name",
+                "price",
+                "quantity"
+            ],
+            "properties": {
+                "available": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.UpdateProductRes": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateWalletReq": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "personal"
+                }
+            }
+        },
+        "model.UpdateWalletRes": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "last_transaction": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "personal"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+            }
+        },
+        "response.DataResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "responseCode": {
+                    "type": "integer"
+                },
+                "responseMessage": {}
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
+    }
+}

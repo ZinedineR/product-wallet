@@ -32,6 +32,7 @@ func (m *AuthMiddleware) JWTAuthentication(c *gin.Context) {
 	}
 
 	c.Set("username", res.Username)
+	c.Set("user_id", res.UserId)
 	c.Set("access_token", res.Token)
 
 	c.Next()

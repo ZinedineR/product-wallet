@@ -1,0 +1,1236 @@
+definitions:
+  entity.Product:
+    properties:
+      available:
+        type: boolean
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  entity.Transaction:
+    properties:
+      amount:
+        type: number
+      description:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      product:
+        $ref: '#/definitions/entity.Product'
+      product_id:
+        type: string
+      transaction_time:
+        type: string
+      type:
+        type: string
+      wallet:
+        $ref: '#/definitions/entity.Wallet'
+      wallet_id:
+        type: string
+    type: object
+  entity.User:
+    properties:
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      password:
+        description: Example of bcrypt-hashed password
+        example: $2a$12$eixZaYVK1fsbw1ZfbX3OXe.PZyWJQ0Zf10hErsTQ6FVRHiA2vwLHu
+        type: string
+      username:
+        example: john_doe
+        type: string
+    type: object
+  entity.Wallet:
+    properties:
+      balance:
+        type: number
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      last_transaction:
+        type: string
+      name:
+        example: personal
+        type: string
+      user:
+        $ref: '#/definitions/entity.User'
+      user_id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    required:
+    - user_id
+    type: object
+  model.CreateProductReq:
+    properties:
+      available:
+        type: boolean
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+    required:
+    - name
+    - price
+    - quantity
+    type: object
+  model.CreateProductRes:
+    properties:
+      available:
+        type: boolean
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  model.CreateTransactionReq:
+    properties:
+      product_id:
+        type: string
+      product_quantity:
+        type: integer
+      wallet_id:
+        type: string
+    required:
+    - product_id
+    - product_quantity
+    - wallet_id
+    type: object
+  model.CreateTransactionRes:
+    properties:
+      amount:
+        type: number
+      description:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      product:
+        $ref: '#/definitions/entity.Product'
+      product_id:
+        type: string
+      transaction_time:
+        type: string
+      type:
+        type: string
+      wallet:
+        $ref: '#/definitions/entity.Wallet'
+      wallet_id:
+        type: string
+    type: object
+  model.CreateUserReq:
+    properties:
+      password:
+        example: SecurePass123!
+        minLength: 8
+        type: string
+      username:
+        example: john_doe
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  model.CreateUserRes:
+    properties:
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      password:
+        description: Example of bcrypt-hashed password
+        example: $2a$12$eixZaYVK1fsbw1ZfbX3OXe.PZyWJQ0Zf10hErsTQ6FVRHiA2vwLHu
+        type: string
+      username:
+        example: john_doe
+        type: string
+    type: object
+  model.CreateWalletReq:
+    properties:
+      name:
+        example: personal
+        type: string
+    type: object
+  model.CreateWalletRes:
+    properties:
+      balance:
+        type: number
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      last_transaction:
+        type: string
+      name:
+        example: personal
+        type: string
+      user:
+        $ref: '#/definitions/entity.User'
+      user_id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    required:
+    - user_id
+    type: object
+  model.CreditTransactionReq:
+    properties:
+      amount:
+        type: number
+      wallet_id:
+        type: string
+    required:
+    - amount
+    - wallet_id
+    type: object
+  model.CreditTransactionRes:
+    properties:
+      amount:
+        type: number
+      description:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      product:
+        $ref: '#/definitions/entity.Product'
+      product_id:
+        type: string
+      transaction_time:
+        type: string
+      type:
+        type: string
+      wallet:
+        $ref: '#/definitions/entity.Wallet'
+      wallet_id:
+        type: string
+    type: object
+  model.DeleteProductRes:
+    type: object
+  model.DeleteTransactionRes:
+    type: object
+  model.DeleteWalletRes:
+    type: object
+  model.GetAllProductRes:
+    properties:
+      data:
+        description: The actual data
+        items:
+          $ref: '#/definitions/entity.Product'
+        type: array
+      limit:
+        description: The size of the page
+        type: integer
+      page:
+        description: The current page
+        type: integer
+      total_pages:
+        description: The total number of pages
+        type: integer
+      total_row_per_page:
+        description: The total number of data per page
+        type: integer
+      total_rows:
+        description: The total number of data
+        type: integer
+    type: object
+  model.GetAllTransactionRes:
+    properties:
+      data:
+        description: The actual data
+        items:
+          $ref: '#/definitions/entity.Transaction'
+        type: array
+      limit:
+        description: The size of the page
+        type: integer
+      page:
+        description: The current page
+        type: integer
+      total_pages:
+        description: The total number of pages
+        type: integer
+      total_row_per_page:
+        description: The total number of data per page
+        type: integer
+      total_rows:
+        description: The total number of data
+        type: integer
+    type: object
+  model.GetAllWalletRes:
+    properties:
+      data:
+        description: The actual data
+        items:
+          $ref: '#/definitions/entity.Wallet'
+        type: array
+      limit:
+        description: The size of the page
+        type: integer
+      page:
+        description: The current page
+        type: integer
+      total_pages:
+        description: The total number of pages
+        type: integer
+      total_row_per_page:
+        description: The total number of data per page
+        type: integer
+      total_rows:
+        description: The total number of data
+        type: integer
+    type: object
+  model.GetProductByIDRes:
+    properties:
+      available:
+        type: boolean
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  model.GetTransactionByIDRes:
+    properties:
+      amount:
+        type: number
+      description:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      product:
+        $ref: '#/definitions/entity.Product'
+      product_id:
+        type: string
+      transaction_time:
+        type: string
+      type:
+        type: string
+      wallet:
+        $ref: '#/definitions/entity.Wallet'
+      wallet_id:
+        type: string
+    type: object
+  model.GetWalletByIDRes:
+    properties:
+      balance:
+        type: number
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      last_transaction:
+        type: string
+      name:
+        example: personal
+        type: string
+      user:
+        $ref: '#/definitions/entity.User'
+      user_id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    required:
+    - user_id
+    type: object
+  model.GetWalletByTransactionRes:
+    properties:
+      balance:
+        type: number
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      last_transaction:
+        type: string
+      name:
+        example: personal
+        type: string
+      transaction:
+        items:
+          $ref: '#/definitions/entity.Transaction'
+        type: array
+      user:
+        $ref: '#/definitions/entity.User'
+      user_id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    required:
+    - user_id
+    type: object
+  model.LoginUserRes:
+    properties:
+      token:
+        description: JWT token example
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+        type: string
+      username:
+        example: john_doe
+        type: string
+    type: object
+  model.TransferTransactionReq:
+    properties:
+      amount:
+        type: number
+      receiver_id:
+        type: string
+      wallet_id:
+        type: string
+    required:
+    - amount
+    - receiver_id
+    - wallet_id
+    type: object
+  model.TransferTransactionRes:
+    properties:
+      receiver_transaction:
+        $ref: '#/definitions/entity.Transaction'
+      sender_transaction:
+        $ref: '#/definitions/entity.Transaction'
+    type: object
+  model.UpdateProductReq:
+    properties:
+      available:
+        type: boolean
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+    required:
+    - name
+    - price
+    - quantity
+    type: object
+  model.UpdateProductRes:
+    properties:
+      available:
+        type: boolean
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  model.UpdateWalletReq:
+    properties:
+      name:
+        example: personal
+        type: string
+    type: object
+  model.UpdateWalletRes:
+    properties:
+      balance:
+        type: number
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      last_transaction:
+        type: string
+      name:
+        example: personal
+        type: string
+      user:
+        $ref: '#/definitions/entity.User'
+      user_id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    required:
+    - user_id
+    type: object
+  response.DataResponse:
+    properties:
+      data: {}
+      responseCode:
+        type: integer
+      responseMessage: {}
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:9004
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Pigeon
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates the user and returns an access token
+      parameters:
+      - description: Login Request
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.LoginUserRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: User login
+      tags:
+      - Users
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user with the provided username and password
+      parameters:
+      - description: Registration Request
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.CreateUserRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Register a new user
+      tags:
+      - Users
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all products with optional filters, pagination,
+        and sorting
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Number of items per page
+        in: query
+        name: pageSize
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      - description: Filter rules
+        in: query
+        name: filter
+        type: string
+      - description: Sort rules
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.GetAllProductRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get all products
+      tags:
+      - Products
+    post:
+      consumes:
+      - application/json
+      description: Creates a new product in the catalog
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Product Request
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateProductReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.CreateProductRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Create a new product
+      tags:
+      - Products
+  /products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a product by ID
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: uuid format
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.DeleteProductRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Delete a product
+      tags:
+      - Products
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the details of a specific product by ID
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: uuid format
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.GetProductByIDRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get product details
+      tags:
+      - Products
+    put:
+      consumes:
+      - application/json
+      description: Updates product details
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: uuid format
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Product Request
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateProductReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.UpdateProductRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Update an existing product
+      tags:
+      - Products
+  /transactions:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all transactions with optional filters, pagination, and
+        sorting
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Number of items per page
+        in: query
+        name: pageSize
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      - description: Filter rules<br><br>### Rules Filter<br>rule:<br>  * {Name of
+          Field}:{value}:{Symbol}<br><br>Symbols:<br>  * eq (=)<br>  * lt (<)<br>  *
+          gt (>)<br>  * lte (<=)<br>  * gte (>=)<br>  * in (in)<br>  * like (like)
+        in: query
+        name: filter
+        type: string
+      - description: Sort rules:<br><br>### Rules Sort<br>rule:<br>  * {Name of Field}:{Symbol}<br><br>Symbols:<br>  *
+          asc<br>  * desc<br><br>
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.GetAllTransactionRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get all transactions
+      tags:
+      - Transactions
+    post:
+      consumes:
+      - application/json
+      description: Creates a new transaction record
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Transaction Request
+        in: body
+        name: transaction
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateTransactionReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.CreateTransactionRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Create a new transaction
+      tags:
+      - Transactions
+  /transactions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a transaction by ID
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.DeleteTransactionRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Delete a transaction
+      tags:
+      - Transactions
+    get:
+      consumes:
+      - application/json
+      description: Retrieves details of a specific transaction by ID
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.GetTransactionByIDRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get transaction details
+      tags:
+      - Transactions
+  /transactions/credit:
+    post:
+      consumes:
+      - application/json
+      description: Credits a specific wallet with an amount
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Credit Transaction Request
+        in: body
+        name: credit
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreditTransactionReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.CreditTransactionRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Credit transaction
+      tags:
+      - Transactions
+  /transactions/transfer:
+    post:
+      consumes:
+      - application/json
+      description: Transfers an amount from one wallet to another
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Transfer Transaction Request
+        in: body
+        name: transfer
+        required: true
+        schema:
+          $ref: '#/definitions/model.TransferTransactionReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.TransferTransactionRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Transfer transaction
+      tags:
+      - Transactions
+  /wallets:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all wallets for the user
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Number of items per page
+        in: query
+        name: pageSize
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      - description: Filter rules<br><br>### Rules Filter<br>rule:<br>  * {Name of
+          Field}:{value}:{Symbol}<br><br>Symbols:<br>  * eq (=)<br>  * lt (<)<br>  *
+          gt (>)<br>  * lte (<=)<br>  * gte (>=)<br>  * in (in)<br>  * like (like)
+        in: query
+        name: filter
+        type: string
+      - description: Sort rules:<br><br>### Rules Sort<br>rule:<br>  * {Name of Field}:{Symbol}<br><br>Symbols:<br>  *
+          asc<br>  * desc<br><br>
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.GetAllWalletRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get all wallets
+      tags:
+      - Wallets
+    post:
+      consumes:
+      - application/json
+      description: Creates a new wallet for the user
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Wallet Request
+        in: body
+        name: wallet
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateWalletReq'
+      - description: Update Wallet Request
+        in: body
+        name: wallet
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateWalletReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.CreateWalletRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Create a new wallet
+      tags:
+      - Wallets
+  /wallets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a wallet by ID
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Wallet ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.DeleteWalletRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Delete a wallet
+      tags:
+      - Wallets
+    get:
+      consumes:
+      - application/json
+      description: Retrieves details of a specific wallet by ID
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Wallet ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.GetWalletByIDRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get wallet details
+      tags:
+      - Wallets
+    put:
+      consumes:
+      - application/json
+      description: Updates wallet information
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Wallet ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Wallet Request
+        in: body
+        name: wallet
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateWalletReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.UpdateWalletRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Update an existing wallet
+      tags:
+      - Wallets
+  /wallets/transaction/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves details of a specific wallet, including transactions
+        within a date range
+      parameters:
+      - description: 'Authorization JWT input: Bearer <Token>'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Wallet ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Start date for transactions in YYYY-MM-DD format
+        in: query
+        name: from
+        type: string
+      - description: End date for transactions in YYYY-MM-DD format
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.GetWalletByTransactionRes'
+              type: object
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get wallet transaction details
+      tags:
+      - Wallets
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

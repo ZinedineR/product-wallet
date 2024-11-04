@@ -133,19 +133,21 @@ func ToFloat64(data interface{}) (float64, error) {
 	case float64:
 		return v, nil
 	case float32:
-		return float64(v), nil
+		return strconv.ParseFloat(strconv.FormatFloat(float64(v), 'f', -1, 64), 64)
 	case int:
-		return float64(v), nil
+		return strconv.ParseFloat(strconv.FormatInt(int64(v), 10), 64)
 	case int32:
-		return float64(v), nil
+		return strconv.ParseFloat(strconv.FormatInt(int64(v), 10), 64)
 	case int64:
-		return float64(v), nil
+		return strconv.ParseFloat(strconv.FormatInt(v, 10), 64)
+	case uint:
+		return strconv.ParseFloat(strconv.FormatUint(uint64(v), 10), 64)
+	case uint32:
+		return strconv.ParseFloat(strconv.FormatUint(uint64(v), 10), 64)
+	case uint64:
+		return strconv.ParseFloat(strconv.FormatUint(v, 10), 64)
 	case string:
-		f, err := strconv.ParseFloat(v, 64)
-		if err != nil {
-			return 0, err
-		}
-		return f, nil
+		return strconv.ParseFloat(v, 64)
 	default:
 		return 0, fmt.Errorf("cannot convert type %s to float64", reflect.TypeOf(data))
 	}

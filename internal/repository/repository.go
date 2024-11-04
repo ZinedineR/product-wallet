@@ -143,7 +143,7 @@ func (r *Repository[T]) FindByFilter(
 	ctx context.Context, tx *gorm.DB, filter model.FilterParams, order model.OrderParam,
 ) (*T, error) {
 	var data T
-	query := tx.WithContext(ctx).Omit(clause.Associations)
+	query := tx.WithContext(ctx).Preload(clause.Associations)
 	query = pagination.Where(filter, query)
 	query = pagination.Order(order, query)
 	if err := query.First(&data).Error; err != nil {

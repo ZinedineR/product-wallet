@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"product-wallet/config"
 	"product-wallet/internal/delivery/http"
+	api "product-wallet/internal/delivery/http/middleware"
 	"product-wallet/internal/delivery/http/route"
 	"product-wallet/internal/repository"
 	services "product-wallet/internal/services"
@@ -35,8 +36,7 @@ var (
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host      localhost:8080
-// @BasePath  /api/notificationsvc/api/v1
+// @host      localhost:9004
 
 // @securityDefinitions.basic  BasicAuth
 
@@ -58,30 +58,35 @@ func main() {
 		AllowHeaders: conf.AppEnvConfig.AllowHeaders,
 	})
 	//external
-	signaturer := signature.NewSignature(conf.AuthConfig.JwtSecretAccessToken, conf.AuthConfig.HMACSecretAccessToken)
+	signaturer := signature.NewSignature(conf.AuthConfig.JwtSecretAccessToken)
 
 	// repository
 	userRepository := repository.NewUserSQLRepository()
+	productRepository := repository.NewProductSQLRepository()
 	walletRepository := repository.NewWalletSQLRepository()
 	transactionRepository := repository.NewTransactionSQLRepository()
 
 	// service
 	userService := services.NewUserService(sqlClient.GetDB(), userRepository, signaturer, validate)
+	productService := services.NewProductService(sqlClient.GetDB(), productRepository, validate)
 	walletService := services.NewWalletService(sqlClient.GetDB(), walletRepository, userRepository, transactionRepository, validate)
-	transactionService := services.NewTransactionService(sqlClient.GetDB(), transactionRepository, walletRepository, validate)
+	transactionService := services.NewTransactionService(sqlClient.GetDB(), transactionRepository, productRepository, walletRepository, validate)
 	// Handler
 	userHandler := http.NewUserHTTPHandler(userService)
+	productHandler := http.NewProductHTTPHandler(productService)
 	walletHandler := http.NewWalletHTTPHandler(walletService)
 	transactionHandler := http.NewTransactionHTTPHandler(transactionService)
 
 	router := route.Router{
 		App:                ginServer.App,
 		UserHandler:        userHandler,
+		ProductHandler:     productHandler,
 		WalletHandler:      walletHandler,
 		TransactionHandler: transactionHandler,
+		AuthMiddleware:     api.NewAuthMiddleware(signaturer),
 	}
-	router.Setup()
 	router.SwaggerRouter()
+	router.Setup()
 	echan := make(chan error)
 	go func() {
 		echan <- ginServer.Start()

@@ -18,6 +18,7 @@ func (req BaseUserReq) ToEntity(password string) *entity.User {
 	return &entity.User{
 		Id:       uuid.NewString(),
 		Username: req.Username,
+		Password: password,
 	}
 }
 
@@ -33,7 +34,7 @@ type LoginUserRes struct {
 
 type UpdateUserReq struct {
 	BaseUserReq
-	ID string `json:"id" name:"id"`
+	ID string
 }
 type UpdateUserRes struct {
 	entity.User

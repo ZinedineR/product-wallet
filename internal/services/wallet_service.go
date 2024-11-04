@@ -40,7 +40,9 @@ func (s *WalletServiceImpl) Create(
 ) (*model.CreateWalletRes, *exception.Exception) {
 	tx := s.db.Begin()
 	defer tx.Rollback()
-
+	if errs := s.validate.Struct(req); errs != nil {
+		return nil, exception.InvalidArgument(errs)
+	}
 	userCheck, err := s.userRepository.FindByID(ctx, s.db, req.UserId)
 	if err != nil {
 		return nil, exception.Internal("error finding user", err)
@@ -85,6 +87,9 @@ func (s *WalletServiceImpl) Update(
 ) (*model.UpdateWalletRes, *exception.Exception) {
 	tx := s.db.Begin()
 	defer tx.Rollback()
+	if errs := s.validate.Struct(req); errs != nil {
+		return nil, exception.InvalidArgument(errs)
+	}
 	userCheck, err := s.userRepository.FindByID(ctx, s.db, req.UserId)
 	if err != nil {
 		return nil, exception.Internal("error finding user", err)
